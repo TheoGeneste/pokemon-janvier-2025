@@ -294,3 +294,12 @@ button:hover{
     height: 200px;
     overflow-y: auto;
 }
+
+.card:hover{
+    cursor: pointer;
+    scale: 1.1;
+}
+
+.navbar-brand:hover{
+    cursor: pointer;
+}

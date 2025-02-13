@@ -3,11 +3,30 @@ import PokemonService from "../Services/PokemonService";
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import TypeService from "../Services/TypeService";
+import CanvasJSReact from '@canvasjs/react-charts';
 
 const PokemonDetails = () => {
-    // Constantes
+    // Constantes (useState)
     const {name} = useParams();
     const [pokemon, setPokemon] = useState({});
+    const [stats, setStats] = useState([]);
+    const CanvasJS = CanvasJSReact.CanvasJS;
+    const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+    const options = {
+        animationEnabled: true,
+        exportEnabled: true,
+        theme: "dark2", // "light1", "dark1", "dark2"
+        title:{
+            text: "Stats"
+        },
+        data: [{
+            type: "pie",
+            indexLabel: "{label}: {y}",		
+            startAngle: -90,
+            dataPoints: stats
+        }]
+    }
 
     // Fonctions / Comportements
     const fetchPokemonByName = async (name) => {
@@ -15,8 +34,15 @@ const PokemonDetails = () => {
             const response = await PokemonService.fetchPokemonByName(name);
             const responseBis = await PokemonService.fetchPokemonSpeciesByName(name);
             const responseTer = await TypeService.fetchTypesByName(response.data.types[0].type.name);
-            console.log({...responseTer.data,...response.data, ...responseBis.data});
+            // console.log({...responseTer.data,...response.data, ...responseBis.data});
             setPokemon({...responseTer.data,...response.data, ...responseBis.data});
+
+            const statTab = [];
+            response.data.stats.map((stat) => {
+                statTab.push({y: stat.base_stat, label: stat.stat.name});
+            }); 
+            setStats(statTab);
+
         } catch (error) {
             console.error(error);
         }
@@ -33,14 +59,14 @@ const PokemonDetails = () => {
         {/* Je crée la div qui va contenir les deux autres div */}
         <div className="d-flex col-12 gap-2">
             {/* Je crée la div Gauche qui contient l'image et les stats */}
-            <div id="gauche" className="col-5 d-flex flex-column align-items-center">
+            <div id="gauche" className="col-5 d-flex flex-column align-items-center justify-content-between">
                 {/* Affiche mon image */}
                 <div id="img">
                     <img src={"https://img.pokemondb.net/artwork/"+name+".jpg"} alt={pokemon.name} />
                 </div>
                 {/* Affiche les Stats */}
-                <div>
-                    Stats
+                <div className="col-12">
+                    <CanvasJSChart options={options} />
                 </div>
             </div>
             {/* Je crée la div droite qui contient le reste des infos */}
@@ -66,7 +92,7 @@ const PokemonDetails = () => {
                         })}
                     </div>
                 </div>
-                <div id="types" className="d-flex flex-column col-12 mt-3">
+                <div id="types" className="d-flex flex-column col-12 mt-3 ">
                     <h3>Types</h3>
                     <div className="d-flex flex-wrap gap-2">
                         {pokemon.types && pokemon.types.map((type, index) => {
