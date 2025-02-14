@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import TypeService from "../Services/TypeService";
 import GenerationService from "../Services/GenerationService";
 import VersionService from "../Services/VersionService";
+import HabitatService from "../Services/HabitatService";
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ const NavBar = () => {
     const [types,setTypes] =useState([]);
     const [generations,setGenerations] =useState([]);
     const [versions,setVersions] =useState([]);
+    const [habitats,setHabitats] =useState([]);
 
     // Crée une fonction fetchTypes qui va chercher les types
     const fetchTypes = async () => {
@@ -46,11 +48,23 @@ const NavBar = () => {
         }
     }
 
+    const fetchHabitat = async () => {
+        try {
+            // Appelle la fonction fetchTypes de TypeService
+            const response = await HabitatService.fetchHabitat();
+            // Met à jour l'état types avec les types récupérés
+            setHabitats(response.data.results);
+        }catch(error) {
+            console.error(error);
+        }
+    }
+
     // Utilise useEffect pour appeler fetchTypes une seule fois
     useEffect(() => {
         fetchTypes();
         fetchGenerations();
         fetchVersion();
+        fetchHabitat();
     }, []);
 
     return <>
@@ -79,6 +93,13 @@ const NavBar = () => {
                             {versions.map((version, index) => {
                                 return <NavDropdown.Item className="item" key={index} onClick={() => {navigate("/version/"+version.name)}}>
                                     {version.name}</NavDropdown.Item>
+                            })}
+                        </NavDropdown>
+                        <NavDropdown title="Habitats" id="basic-nav-dropdown">
+                            {/* .map pour traverser tout le tableau et afficher un item par element */}
+                            {habitats.map((habitat, index) => {
+                                return <NavDropdown.Item className="item" key={index} onClick={() => {navigate("/habitat/"+habitat.name)}}>
+                                    {habitat.name}</NavDropdown.Item>
                             })}
                         </NavDropdown>
                     </Nav>

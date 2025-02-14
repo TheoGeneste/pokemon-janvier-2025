@@ -29,6 +29,10 @@ function fetchPokemonByVersionGroupe(versionGroup){
     return axios.get("https://pokeapi.co/api/v2/version-group/"+versionGroup);
 }
 
+function fetchPokemonByHabitat(habitat){
+    return axios.get("https://pokeapi.co/api/v2/pokemon-habitat/"+habitat);
+}
+
 export default {
     fetchPokemons,
     fetchPokemonByName,
@@ -36,5 +40,6 @@ export default {
     fetchPokemonsByType,
     fetchPokemonByVersion,
     fetchPokemonsByGeneration,
-    fetchPokemonByVersionGroupe
+    fetchPokemonByVersionGroupe,
+    fetchPokemonByHabitat
 }
