@@ -303,3 +303,6 @@ button:hover{
 .navbar-brand:hover{
     cursor: pointer;
 }
+.item{
+    text-transform: capitalize;
+}
