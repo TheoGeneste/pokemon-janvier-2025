@@ -21,11 +21,20 @@ function fetchPokemonsByType(type){
 function fetchPokemonsByGeneration(generation){
     return axios.get("https://pokeapi.co/api/v2/generation/"+generation);
 }
+function fetchPokemonByVersion(version){
+    return axios.get("https://pokeapi.co/api/v2/version/"+version);
+}
+
+function fetchPokemonByVersionGroupe(versionGroup){
+    return axios.get("https://pokeapi.co/api/v2/version-group/"+versionGroup);
+}
 
 export default {
     fetchPokemons,
     fetchPokemonByName,
     fetchPokemonSpeciesByName,
     fetchPokemonsByType,
-    fetchPokemonsByGeneration
+    fetchPokemonByVersion,
+    fetchPokemonsByGeneration,
+    fetchPokemonByVersionGroupe
 }
